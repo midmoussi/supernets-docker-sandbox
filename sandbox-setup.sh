@@ -1,10 +1,38 @@
 #!/bin/bash
 
-# Set variables
-RELEASE_TAG="v0.6.3"
-DOMAIN="www.example-rpc.com"
+# Default values
+DOMAIN="www.supernets-rpc.com"
 RPC_PORT="10002"
-WS_PORT="10002"
+RELEASE_TAG="v0.6.3"
+
+# Usage function
+usage() {
+  echo "Usage: $0 [-d domain] [-p rpc_port] [-r release_tag]" 1>&2;
+  exit 1;
+}
+
+# Parse arguments
+while getopts ":d:p:r:" opt; do
+  case ${opt} in
+    d )
+      DOMAIN=$OPTARG
+      ;;
+    p )
+      RPC_PORT=$OPTARG
+      ;;
+    r )
+      RELEASE_TAG=$OPTARG
+      ;;
+    \? )
+      usage
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND -1))
 
 # Logging function
 log() {
